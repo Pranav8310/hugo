@@ -5,16 +5,20 @@ push:
 branches:
 - main
 
+permissions:
+contents: write
+
 jobs:
 build-deploy:
 runs-on: ubuntu-latest
 
 ```
 steps:
-  - name: Checkout repo
+  - name: Checkout repository
     uses: actions/checkout@v4
     with:
-      submodules: recursive  # important for themes
+      submodules: recursive
+      fetch-depth: 0
 
   - name: Setup Hugo
     uses: peaceiris/actions-hugo@v3
@@ -30,3 +34,4 @@ steps:
     with:
       github_token: ${{ secrets.GITHUB_TOKEN }}
       publish_dir: ./public
+```
