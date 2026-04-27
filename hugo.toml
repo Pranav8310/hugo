@@ -1,3 +1,45 @@
 baseURL = 'https://pranav8310.github.io/hugo/'
-locale = 'en-us'
-title = 'My New Hugo Project'
+title = 'My Blog'
+author = 'Pranav'
+languageCode = 'en-us'
+DefaultContentLanguage = 'en'
+theme = 'paper'
+enableInlineShortcodes = true
+
+[pagination]
+  pagerSize = 10
+
+[params]
+  color = 'linen'
+  # Social media links (optional)
+  # github = 'Pranav8310'
+  # twitter = 'your-twitter'
+  # instagram = 'your-instagram'
+
+  # Avatar (you can use email for Gravatar or a path to image)
+  # avatar = 'your-email@gmail.com'
+  name = 'Pranav'
+  bio = 'Welcome to my blog'
+
+# Enable raw HTML rendering
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 10
+
+  [[menu.main]]
+    identifier = "posts"
+    name = "Posts"
+    url = "/posts/"
+    weight = 20
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
