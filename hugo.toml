@@ -18,7 +18,7 @@ enableInlineShortcodes = true
 
   # Avatar (you can use email for Gravatar or a path to image)
   # avatar = 'your-email@gmail.com'
-  name = 'Pranav'
+  name = 'Hello World'
   bio = 'Welcome to my blog'
 
 # Enable raw HTML rendering
