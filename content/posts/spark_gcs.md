@@ -6,8 +6,6 @@ tags = []
 categories = ['general']
 +++
 
-# Spark GCS Integration Guide
-
 This guide explains how to write data from Apache Spark to Google Cloud Storage (GCS) buckets.
 
 ## Prerequisites Setup
@@ -20,7 +18,7 @@ To enable Spark to write to GCS, you need to create a service account with appro
 
 1. Navigate to **IAM & Admin** > **Service Accounts** in the GCP Console
 2. Click **Create Service Account**
-3. Provide a descriptive name (e.g., `spark-gcs-writer`)
+3. Provide a descriptive name (e.g., `spark-gcs-writer`), And give service account **Storage Object Admin** permission
 4. Keep other settings as default and click **Create**
 5. In the service account details, go to the **Keys** section
 6. Click **Add Key** > **Create New Key**
