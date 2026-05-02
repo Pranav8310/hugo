@@ -1,5 +1,5 @@
 +++
-date = '2026-04-27T13:11:43+05:30'
+date = '2026-05-02T15:08:43+05:30'
 draft = false
 title = 'Write to GCP from local spark'
 tags = []
