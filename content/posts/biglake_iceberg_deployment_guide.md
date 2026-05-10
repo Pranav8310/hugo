@@ -593,42 +593,10 @@ Here's the end-to-end process:
 9. Configure GitHub repository with secrets
 10. Create GitHub Actions workflow
 
-### Regular Development Workflow
-
-#### Step 1: Write Data with Spark
-
-```bash
-# Run Spark job
-spark-submit \
-    --jars ~/personal/proj/jars/iceberg-spark-runtime-3.5_2.12-1.10.1.jar,~/personal/proj/jars/gcs-connector-hadoop3-2.2.5-shaded.jar \
-    --driver-class-path ~/personal/proj/jars/gcs-connector-hadoop3-2.2.5-shaded.jar:~/personal/proj/jars/iceberg-spark-runtime-3.5_2.12-1.10.1.jar \
-    --conf spark.executor.extraClassPath=~/personal/proj/jars/gcs-connector-hadoop3-2.2.5-shaded.jar:~/personal/proj/jars/iceberg-spark-runtime-3.5_2.12-1.10.1.jar \
-    foo.py
-```
-
-#### Step 2: Check Metadata Version
-
-```bash
-gsutil ls gs://write_gcs/iceberg-warehouse/atomic_orders/orders/metadata/v*.json
-```
-
-#### Step 3: Update DDL (if new version)
-
-If a new metadata version was created:
-
-1. Update `ddl/creat_iceberg_table.sql` with the new version number
-2. Commit and push to GitHub
-3. GitHub Actions deploys automatically
-
-#### Step 4: Query in BigQuery
-
 ```sql
 -- Query the table
 SELECT * FROM `stellar-operand-384014.atomic_orders.orders` LIMIT 100;
 ```
-
----
-
 ## Key Differences: Iceberg vs Traditional Tables
 
 ### Why No `_SUCCESS` File?
