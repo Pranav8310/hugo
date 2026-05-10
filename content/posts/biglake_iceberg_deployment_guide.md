@@ -312,39 +312,12 @@ OPTIONS (
 
 **Critical**: The URI must point to the **latest metadata version** (e.g., `v5.metadata.json`). If you run more Spark jobs, you'll need to update this to `v6.metadata.json`, `v7.metadata.json`, etc.
 
-### 3.4 Execute DDL Manually (Testing)
-
-```bash
-# Run the DDL
-bq query --use_legacy_sql=false < creat_iceberg_table.sql
-
-# Verify table creation
-bq show stellar-operand-384014:atomic_orders.orders
-
-# Query the table
-bq query --use_legacy_sql=false \
-  "SELECT * FROM \`stellar-operand-384014.atomic_orders.orders\` LIMIT 10"
-```
-
-### 3.5 Updating Metadata After New Spark Runs
+### 3.4 Updating Metadata After New Spark Runs
 
 After running your Spark job again:
 
-1. **Check the new metadata version**:
-   ```bash
-   gsutil ls gs://write_gcs/iceberg-warehouse/atomic_orders/orders/metadata/v*.json
-   ```
-
-2. **Update the DDL** with the new version:
-   ```sql
-   CREATE OR REPLACE EXTERNAL TABLE `stellar-operand-384014.atomic_orders.orders`
-   WITH CONNECTION `us.my-biglake-connection`
-   OPTIONS (
-     format = 'ICEBERG',
-     uris = ['gs://write_gcs/iceberg-warehouse/atomic_orders/orders/metadata/v6.metadata.json']
-   );
-   ```
-
+1. **Check the new metadata version if you re-run your spark job again**:
+2. **Update the DDL** with the new version of **v^**metadata.json:
 3. **Re-run the DDL** to update the BigLake table.
 
 **Automation Tip**: This manual update process can be automated using GitHub Actions (covered in Part 4).
@@ -652,13 +625,6 @@ If a new metadata version was created:
 ```sql
 -- Query the table
 SELECT * FROM `stellar-operand-384014.atomic_orders.orders` LIMIT 100;
-
--- Check row count
-SELECT COUNT(*) FROM `stellar-operand-384014.atomic_orders.orders`;
-
--- Time travel query (if multiple snapshots)
-SELECT * FROM `stellar-operand-384014.atomic_orders.orders`
-FOR SYSTEM_TIME AS OF TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 HOUR);
 ```
 
 ---
@@ -691,48 +657,6 @@ v5.metadata.json  →  Latest snapshot (current state)
 ```
 
 **Time Travel**: You can query any historical version by pointing to older metadata files (if needed).
-
----
-
-## Troubleshooting
-
-### Issue 1: "Permission Denied" when querying BigLake table
-
-**Cause**: BigQuery connection service account doesn't have GCS access.
-
-**Solution**:
-```bash
-gsutil iam ch serviceAccount:bqcx-xxx@gcp-sa-bigquery-condel.iam.gserviceaccount.com:objectViewer gs://write_gcs
-```
-
-### Issue 2: "Metadata file not found"
-
-**Cause**: Wrong metadata version in DDL or file doesn't exist.
-
-**Solution**:
-```bash
-# List all versions
-gsutil ls gs://write_gcs/iceberg-warehouse/atomic_orders/orders/metadata/v*.json
-
-# Update DDL with the latest version
-```
-
-### Issue 3: GitHub Actions fails with authentication error
-
-**Cause**: Workload Identity Federation not configured correctly.
-
-**Solution**:
-1. Verify the WIF provider name in GitHub secrets
-2. Check service account has `roles/iam.workloadIdentityUser`
-3. Ensure `permissions: id-token: write` is set in workflow
-
-### Issue 4: Schema mismatch errors
-
-**Cause**: DDL schema doesn't match Iceberg table schema.
-
-**Solution**: BigLake external tables automatically read schema from Iceberg metadata - no need to specify schema in DDL.
-
----
 
 ## Summary
 
