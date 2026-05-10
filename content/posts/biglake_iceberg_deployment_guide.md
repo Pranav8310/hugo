@@ -1,7 +1,7 @@
 +++
 date = '2026-05-10T16:50:00+05:30'
 draft = false
-title = 'Creating BigLake Iceberg Tables with Spark and GitHub Actions'
+title = 'Creating BigLake Iceberg Tables on GCP'
 tags = ['BigQuery', 'BigLake', 'Iceberg', 'Spark', 'GCP', 'GitHub Actions']
 categories = ['data-engineering', 'cloud']
 +++
